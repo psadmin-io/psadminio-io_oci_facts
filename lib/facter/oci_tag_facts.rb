@@ -131,6 +131,43 @@ else
 
     end
 
+    if hash.has_key?("definedTags") then
+
+      debug_msg("Hash of definedTags found")
+      result = {}
+
+      ################################################################################
+      #
+      # Loop through all tags
+      #
+
+      hash['definedTags'].each do |child|
+      #  debug_msg("#{child[0]}")
+
+        # Name it and make sure its lower case and convert spaces to underscores
+        name = "#{child[0]}".to_s
+        name.downcase!
+        name.gsub!(/\W+/, "_")
+        fact = "oci_tag_#{name}"
+
+        #debug_msg("Setting fact #{fact} to #{child[1]}")
+
+        # append to the hash for structured fact later
+        #result[name] = child[1].dup
+
+        debug_msg("Added #{fact} to results hash for structured fact")
+
+        # set puppet fact - flat version
+        Facter.add("#{fact}") do
+          setcode do
+            child[1]
+          end
+        end
+
+      end
+
+    end
+
   end
 
 end
