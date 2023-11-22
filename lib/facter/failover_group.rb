@@ -67,7 +67,7 @@ compute_client.list_instances(compartmentid).data.each { |inst|
 
 Facter.add(:pia_failover_group) do
   setcode do
-    pia_failover_group
+    pia_failover_group.join(', ')
   end
 end
 
@@ -79,7 +79,7 @@ compute_client.list_instances(compartmentid).data.each { |inst|
       compute_client.list_vnic_attachments(compartmentid, instance_id: inst.id).each { |vnic_attachments|
         vnic_attachments.data.each { |attachment|
           vnic = vcn_client.get_vnic(attachment.vnic_id).data
-          pia_failover_group.push(vnic.private_ip)
+          pia_failover_group.push(vnic.private_ip + ":%{hiera('jolt_port')}")
         }
       }
     end
@@ -88,7 +88,7 @@ compute_client.list_instances(compartmentid).data.each { |inst|
 
 Facter.add(:ib_failover_group) do
   setcode do
-    ib_failover_group
+    ib_failover_group.join(',')
   end
 end
 
@@ -100,7 +100,7 @@ compute_client.list_instances(compartmentid).data.each { |inst|
       compute_client.list_vnic_attachments(compartmentid, instance_id: inst.id).each { |vnic_attachments|
         vnic_attachments.data.each { |attachment|
           vnic = vcn_client.get_vnic(attachment.vnic_id).data
-          ren_failover_group.push(vnic.private_ip)
+          ren_failover_group.push(vnic.private_ip + ":%{hiera('ren_port')}")
         }
       }
     end
@@ -109,7 +109,7 @@ compute_client.list_instances(compartmentid).data.each { |inst|
 
 Facter.add(:ren_failover_group) do
   setcode do
-    ren_failover_group
+    ren_failover_group.join(',')
   end
 end
 
@@ -130,7 +130,7 @@ compute_client.list_instances(compartmentid).data.each { |inst|
 
 Facter.add(:search_failover_group) do
   setcode do
-    search_failover_group
+    search_failover_group.join(',')
   end
 end
 
@@ -151,6 +151,6 @@ compute_client.list_instances(compartmentid).data.each { |inst|
 
 Facter.add(:dashboard_failover_group) do
   setcode do
-    dashboard_failover_group
+    dashboard_failover_group.join(',')
   end
 end
