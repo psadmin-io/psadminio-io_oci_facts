@@ -51,7 +51,7 @@ oci_tag_schedule => {
 
 ## Installation
 
-### DPK Installation
+### PeopleSoft DPK Installation
 
 Cloning the repository:
 
@@ -68,3 +68,43 @@ git submodule add https://github.com/psadmin-io/psadminio-io_oci_facts.git modul
 ```
 
 Once copied the `modules` directory, Puppet will include the new facts the next time it is run.
+
+### Custom Installation
+
+For use external to PeopleSoft DPK, you may want to install in a different location. Update `$FACTERLIB` in your environment to include your custom installation location.
+
+```bash
+$ REPO_DIR=/tmp/io_oci_facts
+$ git clone https://github.com/psadmin-io/psadminio-io_oci_facts.git $REPO_DIR
+$ export FACTERLIB="$FACTERLIB:$REPO_DIR/lib/facter"
+$ facter oci_tag_peoplesoft
+oci_tag_peoplesoft => {
+  failovergroup => "pia",
+  role => "midtier",
+  tier => "dev",
+  tools_version => "8.60"
+}
+```
+
+## CLI Usage Examples
+
+```bash
+$facter --custom-dir $REPO_DIR/lib/facter oci_tag_peoplesoft
+oci_tag_peoplesoft => {
+  failovergroup => "pia",
+  role => "midtier",
+  tier => "dev",
+  tools_version => "8.60"
+}
+```
+
+```bash
+$ export FACTERLIB="$FACTERLIB:$REPO_DIR/lib/facter"
+$facter oci_tag_peoplesoft
+oci_tag_peoplesoft => {
+  failovergroup => "pia",
+  role => "midtier",
+  tier => "dev",
+  tools_version => "8.60"
+}
+```
