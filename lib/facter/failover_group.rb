@@ -58,7 +58,7 @@ compute_client.list_instances(compartmentid).data.each { |inst|
       compute_client.list_vnic_attachments(compartmentid, instance_id: inst.id).each { |vnic_attachments|
         vnic_attachments.data.each { |attachment|
           vnic = vcn_client.get_vnic(attachment.vnic_id).data
-          pia_failover_group.push(vnic.private_ip)
+          pia_failover_group.push(vnic.private_ip + ":%{hiera('jolt_port')}")
         }
       }
     end
